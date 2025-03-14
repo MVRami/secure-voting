@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Secure Online Voting</title>
+</head>
+<body>
+    <h1>Register Voter</h1>
+    <form id="register-form">
+        Email: <input type="email" id="email" required><br>
+        Password: <input type="password" id="password" required><br>
+        <button type="submit">Register</button>
+    </form>
+
+    <h1>Authenticate Voter</h1>
+    <form id="authenticate-form">
+        Email: <input type="email" id="auth-email" required><br>
+        Password: <input type="password" id="auth-password" required><br>
+        <button type="submit">Authenticate</button>
+    </form>
+
+    <h1>Vote</h1>
+    <form id="vote-form">
+        Voter ID: <input type="text" id="voter-id" required><br>
+        Candidate: <input type="text" id="candidate" required><br>
+        <button type="submit">Vote</button>
+    </form>
+
+    <script>
+        document.getElementById('register-form').onsubmit = async function (e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const response = await fetch('/voters/register', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({email, password})
+            });
+            const data = await response.json();
+            alert(data.message);
+        };
+
+        document.getElementById('authenticate-form').onsubmit = async function (e) {
+            e.preventDefault();
+            const email = document.getElementById('auth-email').value;
+            const password = document.getElementById('auth-password').value;
+            const response = await fetch('/voters/authenticate', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({email, password})
+            });
+            const data = await response.json();
+            alert(data.message);
+        };
+
+        document.getElementById('vote-form').onsubmit = async function (e) {
+            e.preventDefault();
+            const voter_id = document.getElementById('voter-id').value;
+            const candidate = document.getElementById('candidate').value;
+            const response = await fetch('/votes/new', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({voter_id, candidate})
+            });
+            const data = await response.json();
+            alert(data.message);
+        };
+    </script>
+</body>
+</html>
